@@ -17,21 +17,27 @@ jobs:
         run: choco install jmeter -y  # Use Chocolatey to install JMeter on Windows
  
       - name: Check JMeter Version
-        run: jmeter -v # This creates both the results folder and the html folder inside it
+        run: jmeter -v  # Verify JMeter installation and version
  
       - name: Run JMeter Tests
-        run: jmeter -n -t scripts/DemoBlaze.jmx  -Jusers=1 -Jramp_up=1 -l results/result.csv -e -o html -j results/jmeter.log 
+        run: jmeter -n -t scripts/DemoBlaze.jmx -Jusers=1 -Jramp_up=1 -l results/result.csv -e -o html -j results/jmeter.log
  
       - name: List Results Directory
         run: |
           echo "Listing results directory:"
-          dir results # Use 'dir' on Windows instead of 'ls'
+          dir results  # Use 'dir' to list the contents of results folder in Windows
  
       - name: Upload JMeter Results
         uses: actions/upload-artifact@v3
         with:
           name: jmeter-results
           path: results/result.jtl
+ 
+      - name: Upload JMeter Log  # New step to upload the JMeter log file
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-log
+          path: results/jmeter.log
  
       - name: Upload HTML Report
         uses: actions/upload-artifact@v3
