@@ -20,7 +20,7 @@ jobs:
         run: jmeter -v # This creates both the results folder and the html folder inside it
  
       - name: Run JMeter Tests
-        run: jmeter -n -t scripts/DemoBlaze.jmx  -Jusers=1 -Jramp_up=1 -Jloop_count=1 -l results/result.csv -e -o html
+        run: jmeter -n -t scripts/DemoBlaze.jmx  -Jusers=1 -Jramp_up=1 -l results/result.csv -e -o html
  
       - name: List Results Directory
         run: |
