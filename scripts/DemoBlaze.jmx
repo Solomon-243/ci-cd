@@ -12,7 +12,7 @@
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
         <stringProp name="ThreadGroup.num_threads">${__P(users,10)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(ramp_up,1)}</stringProp>
-        <longProp name="ThreadGroup.duration">120</longProp>
+        <longProp name="ThreadGroup.duration">126</longProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
