@@ -3,7 +3,7 @@ name: Automated JMeter Tests
 on: 
   push:
     branches: 
-      - main
+      - demo_blaze
  
 jobs:
   automated-jmeter-tests:
