@@ -21,11 +21,6 @@ on:
         required: true
         default: 5  # Default option
 
-  # Automatically trigger on push to specific branches
-  push:
-    branches: 
-      - demo_blaze  # Run tests automatically when code is pushed to 'demo_blaze'
-
 jobs:
   automated-jmeter-tests:
     runs-on: windows-latest
