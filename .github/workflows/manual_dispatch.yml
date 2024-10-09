@@ -1,45 +1,76 @@
 name: Automated JMeter Tests
- 
+
+# Define triggers
 on: 
-  workflow_dispatch:  # Allow manual trigger
- 
+  # Manual workflow trigger with input parameters
+  workflow_dispatch:
+    inputs:
+      users:
+        description: 'Number of users (threads)'  # This will be the label
+        required: true
+        type: choice  # Dropdown selection
+        options: 
+          - 1
+          - 5
+          - 10
+          - 20
+          - 50
+        default: 1  # Default option
+      ramp_up:
+        description: 'Ramp-up period (seconds)'  # This will be the label
+        required: true
+        type: choice  # Dropdown selection
+        options: 
+          - 1
+          - 5
+          - 10
+          - 20
+          - 30
+        default: 1  # Default option
+
+  # Automatically trigger on push to specific branches
+  push:
+    branches: 
+      - demo_blaze  # Run tests automatically when code is pushed to 'demo_blaze'
+
 jobs:
   automated-jmeter-tests:
     runs-on: windows-latest
- 
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
- 
+
       - name: Set Up JMeter
         run: choco install jmeter -y  # Use Chocolatey to install JMeter on Windows
- 
+
       - name: Check JMeter Version
         run: jmeter -v  # Verify JMeter installation and version
- 
+
       - name: Run JMeter Tests
-        run: jmeter -n -t scripts/DemoBlaze.jmx -Jusers=1 -Jramp_up=1 -l results/result.jtl -e -o html -j results/jmeter.log
- 
+        run: |
+          jmeter -n -t scripts/DemoBlaze.jmx -Jusers=${{ github.event.inputs.users }} -Jramp_up=${{ github.event.inputs.ramp_up }} -l results/result.csv -e -o html -j results/jmeter.log
+
       - name: List Results Directory
         run: |
           echo "Listing results directory:"
           dir results  # Use 'dir' to list the contents of results folder in Windows
- 
+
       - name: Upload JMeter Results
         uses: actions/upload-artifact@v3
         with:
           name: jmeter-results
-          path: results/result.jtl
- 
+          path: results/result.csv
+
       - name: Upload JMeter Log
         uses: actions/upload-artifact@v3
         with:
           name: jmeter-log
           path: results/jmeter.log
- 
+
       - name: Upload HTML Report
         uses: actions/upload-artifact@v3
         with:
           name: jmeter-html-report
-          path: html  # Uploads the entire HTML report folder
+          path: html  # This uploads the entire HTML report folder
           if-no-files-found: error
