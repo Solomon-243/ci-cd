@@ -1,0 +1,103 @@
+name: Automated JMeter Tests
+
+# Define triggers
+on: 
+  push:
+    branches: 
+      - demo_blaze
+  # Schedule the workflow to run on time
+  schedule:
+    - cron: "*40 14 * * *"  #will execute on 2:40
+
+jobs:
+  automated-jmeter-tests:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set Up JMeter
+        run: choco install jmeter -y  # Use Chocolatey to install JMeter on Windows
+
+      - name: Check JMeter Version
+        run: jmeter -v  # Verify JMeter installation and version
+
+      - name: Run JMeter Tests
+        run: |
+          jmeter -n -t scripts/DemoBlaze.jmx -Jusers=1 -Jramp_up=1 -l results/result.csv -e -o html -j results/jmeter.log
+
+      - name: List Results Directory
+        run: |
+          echo "Listing results directory:"
+          dir results  # Use 'dir' to list the contents of results folder in Windows
+
+      - name: Upload JMeter Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-results
+          path: results/result.csv
+
+      - name: Upload JMeter Log
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-log
+          path: results/jmeter.log
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-html-report
+          path: html  # This uploads the entire HTML report folder
+          if-no-files-found: errorname: Automated JMeter Tests
+
+# Define triggers
+on: 
+  push:
+    branches: 
+      - demo_blaze
+  # Schedule the workflow to run every 5 minutes
+  schedule:
+    - cron: "*/5 * * * *"  # Run every 5 minutes
+
+jobs:
+  automated-jmeter-tests:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set Up JMeter
+        run: choco install jmeter -y  # Use Chocolatey to install JMeter on Windows
+
+      - name: Check JMeter Version
+        run: jmeter -v  # Verify JMeter installation and version
+
+      - name: Run JMeter Tests
+        run: |
+          jmeter -n -t scripts/DemoBlaze.jmx -Jusers=1 -Jramp_up=1 -l results/result.csv -e -o html -j results/jmeter.log
+
+      - name: List Results Directory
+        run: |
+          echo "Listing results directory:"
+          dir results  # Use 'dir' to list the contents of results folder in Windows
+
+      - name: Upload JMeter Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-results
+          path: results/result.csv
+
+      - name: Upload JMeter Log
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-log
+          path: results/jmeter.log
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-html-report
+          path: html  # This uploads the entire HTML report folder
+          if-no-files-found: error
