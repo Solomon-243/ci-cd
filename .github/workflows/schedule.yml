@@ -2,7 +2,7 @@ name: Automated JMeter Tests
 
 # Define triggers
 on: 
-  
+   
   # Schedule the workflow to run every 5 minutes
   schedule:
     - cron: "*/5 * * * *"  # Run every 5 minutes
