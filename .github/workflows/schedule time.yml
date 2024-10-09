@@ -5,9 +5,9 @@ on:
   push:
     branches: 
       - demo_blaze
-  # Schedule the workflow to run at 5:00 PM UTC
+  # Schedule the workflow to run at 3:30 PM UTC
   schedule:
-    - cron: "0 17 * * *"  # Runs at 5:00 PM UTC every day
+    - cron: "30 15 * * *"  # Runs at 3:30 PM UTC every day
 
 jobs:
   automated-jmeter-tests:
