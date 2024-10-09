@@ -16,10 +16,10 @@ on:
           - 20
           - 50
         default: 1  # Default option
-      ramp_up:
-        description: 'Ramp-up period (seconds)'  # This will be the label
+      ramp_up:  # Input for ramp-up time
+        description: "Ramp-up time in seconds"
         required: true
-        default: 5  # Default option
+        default: 100 # Default option
 
   # Automatically trigger on push to specific branches
   push:
