@@ -2,6 +2,8 @@ name: Automated JMeter Tests
 
 # Define triggers
 on: 
+  # Manual workflow trigger with input parameters
+  workflow_dispatch:
     inputs:
       users:
         description: 'Number of users (threads)'
@@ -25,6 +27,11 @@ on:
           - 20
           - 30
         default: 1
+
+  # Automatically trigger on push to specific branches
+  push:
+    branches: 
+      - demo_blaze  # Run tests automatically when code is pushed to 'demo_blaze'
 
   # Schedule the workflow to run every 5 minutes
   schedule:
