@@ -2,8 +2,31 @@ name: Automated JMeter Tests
 
 # Define triggers
 on: 
-  # Manual workflow trigger
+  # Manual workflow trigger with input parameters
   workflow_dispatch:
+    inputs:
+      users:
+        description: 'Number of users (threads)'  # This will be the label
+        required: true
+        type: choice  # Dropdown selection
+        options: 
+          - 1
+          - 5
+          - 10
+          - 20
+          - 50
+        default: 1  # Default option
+      ramp_up:
+        description: 'Ramp-up period (seconds)'  # This will be the label
+        required: true
+        type: choice  # Dropdown selection
+        options: 
+          - 1
+          - 5
+          - 10
+          - 20
+          - 30
+        default: 1  # Default option
 
   # Automatically trigger on push to specific branches
   push:
@@ -25,7 +48,8 @@ jobs:
         run: jmeter -v  # Verify JMeter installation and version
 
       - name: Run JMeter Tests
-        run: jmeter -n -t scripts/DemoBlaze.jmx -Jusers=1 -Jramp_up=1 -l results/result.jtl -e -o html -j results/jmeter.log
+        run: |
+          jmeter -n -t scripts/DemoBlaze.jmx -Jusers=${{ github.event.inputs.users }} -Jramp_up=${{ github.event.inputs.ramp_up }} -l results/result.csv -e -o html -j results/jmeter.log
 
       - name: List Results Directory
         run: |
@@ -36,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jmeter-results
-          path: results/result.jtl
+          path: results/result.csv
 
       - name: Upload JMeter Log
         uses: actions/upload-artifact@v3
