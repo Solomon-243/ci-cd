@@ -2,10 +2,6 @@ name: Automated JMeter Tests
 
 # Define triggers
 on: 
-  # Schedule the workflow to run every 5 minutes
-  schedule:
-    - cron: "*/5 * * * *"  # Run every 5 minutes
-    
     inputs:
       users:
         description: 'Number of users (threads)'
@@ -29,6 +25,10 @@ on:
           - 20
           - 30
         default: 1
+
+  # Schedule the workflow to run every 5 minutes
+  schedule:
+    - cron: "*/5 * * * *"  # Run every 5 minutes
 
 jobs:
   automated-jmeter-tests:
