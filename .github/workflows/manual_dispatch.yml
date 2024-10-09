@@ -19,14 +19,7 @@ on:
       ramp_up:
         description: 'Ramp-up period (seconds)'  # This will be the label
         required: true
-        type: choice  # Dropdown selection
-        options: 
-          - 1
-          - 5
-          - 10
-          - 20
-          - 30
-        default: 1  # Default option
+        default: 5  # Default option
 
   # Automatically trigger on push to specific branches
   push:
