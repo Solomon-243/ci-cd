@@ -2,11 +2,7 @@ name: Automated JMeter Tests
 
 # Define triggers
 on: 
-  # Automatically trigger on push to specific branches
-  push:
-    branches: 
-      - demo_blaze  # Run tests automatically when code is pushed to 'demo_blaze'
-
+  
   # Schedule the workflow to run every 5 minutes
   schedule:
     - cron: "*/5 * * * *"  # Run every 5 minutes
