@@ -1,4 +1,4 @@
-name: Run Postman Tests with Newman
+name: DemoBlaze postman tests
 
 on:
   push:
@@ -29,6 +29,13 @@ jobs:
 
       - name: Create reports folder
         run: mkdir -p reports
+
+      - name: Debug files
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Repository structure:"
+          ls -R
 
       - name: Run Postman Collection
         run: |
