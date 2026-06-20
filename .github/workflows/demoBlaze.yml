@@ -1,70 +1,69 @@
 name: DemoBlaze Postman Tests
 
 on:
-push:
-branches:
-- main
-pull_request:
-branches:
-- main
-workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-postman-tests:
-runs-on: ubuntu-latest
+  postman-tests:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v5
-    with:
-      node-version: 24
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
 
-  - name: Install Newman
-    run: |
-      npm install -g newman
-      npm install -g newman-reporter-htmlextra
+      - name: Install Newman
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
 
-  - name: Create reports folder
-    run: mkdir -p reports
+      - name: Create reports folder
+        run: mkdir -p reports
 
-  - name: Debug Repository Structure
-    run: |
-      echo "Working Directory:"
-      pwd
-      echo ""
-      echo "Repository Structure:"
-      ls -R
+      - name: Debug Repository Structure
+        run: |
+          echo "Working Directory:"
+          pwd
+          echo ""
+          echo "Repository Structure:"
+          ls -R
 
-  - name: Verify Collection Exists
-    run: |
-      test -f scripts/DemoBlaze.postman_collection.json
-      echo "Collection file found."
+      - name: Verify Collection Exists
+        run: |
+          test -f scripts/DemoBlaze.postman_collection.json
+          echo "Collection file found."
 
-  - name: Verify Environment Exists
-    run: |
-      test -f scripts/DemoBlazeEnv.postman_environment.json
-      echo "Environment file found."
+      - name: Verify Environment Exists
+        run: |
+          test -f scripts/DemoBlazeEnv.postman_environment.json
+          echo "Environment file found."
 
-  - name: Display Environment Variables
-    run: |
-      echo "===== ENVIRONMENT FILE ====="
-      cat scripts/DemoBlazeEnv.postman_environment.json
+      - name: Display Environment Variables
+        run: |
+          echo "===== ENVIRONMENT FILE ====="
+          cat scripts/DemoBlazeEnv.postman_environment.json
 
-  - name: Run Postman Collection
-    run: |
-      newman run scripts/DemoBlaze.postman_collection.json \
-        -e scripts/DemoBlazeEnv.postman_environment.json \
-        --verbose \
-        -r cli,htmlextra \
-        --reporter-htmlextra-export reports/newman-report.html
+      - name: Run Postman Collection
+        run: |
+          newman run scripts/DemoBlaze.postman_collection.json \
+            -e scripts/DemoBlazeEnv.postman_environment.json \
+            --verbose \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export reports/newman-report.html
 
-  - name: Upload Newman Report
-    if: always()
-    uses: uses: actions/upload-artifact@v4
-    with:
-      name: newman-report
-      path: reports/newman-report.html
+      - name: Upload Newman Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: reports/newman-report.html
