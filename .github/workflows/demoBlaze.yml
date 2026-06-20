@@ -64,7 +64,7 @@ steps:
 
   - name: Upload Newman Report
     if: always()
-    uses: actions/upload-artifact@v5
+    uses: uses: actions/upload-artifact@v4
     with:
       name: newman-report
       path: reports/newman-report.html
