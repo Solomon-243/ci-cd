@@ -1,15 +1,16 @@
 {
   "info": {
-    "_postman_id": "fixed-demoblaze-collection",
-    "name": "DemoBlaze Fixed Collection",
+    "_postman_id": "demoblaze-fixed-full-flow",
+    "name": "DemoBlaze FULL FIXED FLOW",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+
   "item": [
+
     {
       "name": "1 - entries",
       "request": {
         "method": "GET",
-        "header": [],
         "url": "https://api.demoblaze.com/entries"
       },
       "event": [
@@ -20,14 +21,15 @@
               "pm.test('Status 200', () => pm.response.to.have.status(200));",
               "",
               "const json = pm.response.json();",
+              "",
               "pm.test('Items exist', () => {",
-              "  pm.expect(json.Items).to.be.an('array');",
-              "  pm.expect(json.Items.length).to.be.greaterThan(0);",
+              "    pm.expect(json.Items).to.be.an('array');",
+              "    pm.expect(json.Items.length).to.be.greaterThan(0);",
               "});",
               "",
-              "// store first product",
-              "pm.environment.set('ID', json.Items[0]._id || 1);",
-              "pm.environment.set('TITLE', json.Items[0].name || '');"
+              "// store first product safely",
+              "pm.environment.set('ID', json.Items[0].id);",
+              "pm.environment.set('TITLE', json.Items[0].title);"
             ]
           }
         }
@@ -55,11 +57,16 @@
               "pm.test('Status 200', () => pm.response.to.have.status(200));",
               "",
               "const json = pm.response.json();",
-              "pm.environment.set('ID', json._id || json.id || {{ID}});",
-              "pm.environment.set('TITLE', json.title || '');",
               "",
-              "pm.test('Title exists', () => {",
-              "  pm.expect(json.title).to.exist;",
+              "const id = json.id;",
+              "const title = json.title;",
+              "",
+              "pm.environment.set('ID', id);",
+              "pm.environment.set('TITLE', title);",
+              "",
+              "pm.test('Valid product', () => {",
+              "    pm.expect(id).to.exist;",
+              "    pm.expect(title).to.be.a('string');",
               "});"
             ]
           }
@@ -69,6 +76,18 @@
 
     {
       "name": "3 - add to cart",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "if (!pm.environment.get('USER_ID')) {",
+              "    pm.environment.set('USER_ID', pm.variables.replaceIn('{{$randomUUID}}'));",
+              "}"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [
@@ -81,16 +100,6 @@
         "url": "https://api.demoblaze.com/addtocart"
       },
       "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "exec": [
-              "if (!pm.environment.get('USER_ID')) {",
-              "  pm.environment.set('USER_ID', pm.variables.replaceIn('{{$randomUUID}}'));",
-              "}"
-            ]
-          }
-        },
         {
           "listen": "test",
           "script": {
@@ -125,26 +134,17 @@
               "const json = pm.response.json();",
               "",
               "pm.test('Cart has items', () => {",
-              "  pm.expect(json.Items).to.be.an('array');",
+              "    pm.expect(json.Items).to.be.an('array');",
+              "    pm.expect(json.Items.length).to.be.greaterThan(0);",
+              "});",
+              "",
+              "pm.test('Product ID matches', () => {",
+              "    pm.expect(json.Items[0].prod_id).to.eql(parseInt(pm.environment.get('ID')));",
               "});"
             ]
           }
         }
       ]
-    }
-  ],
-
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "exec": [
-          "// global setup if needed",
-          "if (!pm.environment.get('USER_ID')) {",
-          "  pm.environment.set('USER_ID', pm.variables.replaceIn('{{$randomUUID}}'));",
-          "}"
-        ]
-      }
     }
   ]
 }
