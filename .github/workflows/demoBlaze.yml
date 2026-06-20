@@ -32,8 +32,8 @@ jobs:
 
       - name: Run Postman Collection
         run: |
-          newman run postman/DemoBlaze.postman_collection.json \
-            -e postman/DemoBlazeEnv.postman_environment.json \
+          newman run scripts/DemoBlaze.postman_collection.json \
+            -e scripts/DemoBlazeEnv.postman_environment.json \
             -r cli,htmlextra \
             --reporter-htmlextra-export reports/newman-report.html
 
